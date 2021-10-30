@@ -12,3 +12,8 @@ Contributors:
 * Ivan Mendoza (http://github.com/ivan776)
 * Michael Velasquez (http://github.com/tgmike)
 * Oscar Ramirez (http://github.com/csramirez)
+
+Tech Stack:
+* Front-End: Android
+* Backend: Node
+* Database: SQLite
