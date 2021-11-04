@@ -8,7 +8,9 @@ const server = http.createServer((req, res) => {
   res.setHeader('Content-Type', 'text/plain');
   res.end('Hello World');
 });
-
+app.get("/url", (req, res, next) => {
+  res.json(["Tony","Lisa","Michael","Ginger","Food"]);
+ });
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
