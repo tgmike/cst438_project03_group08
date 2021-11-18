@@ -22,8 +22,23 @@ app.get("/", (req, res, next) => {
   res.send("Hello World!");
  });
 
-app.get("/url", (req, res, next) => {
-  res.json({"test": ["Tony","Lisa","Michael","Ginger","Food"]});
+ app.get("/books", async (req, res, next) => {
+  let booksSql = "SELECT * FROM Books";
+  let books = await executeSQL(booksSql);
+  res.json(books);
+ });
+
+app.get("/book", async (req, res, next) => {
+  let bookId = req.query.bookId;
+  let bookSql = "SELECT * FROM Books where bookId = ?";
+  let param = [bookId]
+  let book = await executeSQL(bookSql, param);
+  if(book.length == 0){
+    return res.status(404).send({
+      message: 'Error book not found'
+   });
+  }
+  res.json(book[0]);
  });
  
 app.listen(port, hostname, () => {
