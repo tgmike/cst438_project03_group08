@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/tgmike/cst438_project03_group08/issues"
   },
-  "homepage": "https://github.com/tgmike/cst438_project03_group08#readme"
+  "homepage": "https://github.com/tgmike/cst438_project03_group08#readme",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mysql": "^2.18.1"
+  }
 }
