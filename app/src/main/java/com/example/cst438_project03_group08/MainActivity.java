@@ -12,7 +12,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent i = new Intent(MainActivity.this, LoginPage.class);
-        startActivity(i);
+        // To test different activities I have the lines below.
+        // Commenting out for now so that, it doesn't default to this activity
+        // when someone runs the application
+//        Intent i = new Intent(MainActivity.this, LoginPage.class);
+//        startActivity(i);
     }
 }
