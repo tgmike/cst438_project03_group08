@@ -19,13 +19,13 @@ function dbConnection() {
 
 app.get("/", (req, res, next) => {
   res.send("Hello World!");
- });
+});
 
- app.get("/books", async (req, res, next) => {
+app.get("/books", async (req, res, next) => {
   let booksSql = "SELECT * FROM Books";
   let books = await executeSQL(booksSql);
   res.json(books);
- });
+});
 
 app.get("/book", async (req, res, next) => {
   let bookId = req.query.bookId;
@@ -35,10 +35,10 @@ app.get("/book", async (req, res, next) => {
   if(book.length == 0){
     return res.status(404).send({
       message: 'Error book not found'
-   });
+    });
   }
   res.json(book[0]);
- });
+});
  
 app.listen(port, () => {
   console.log(`Server running at ${port}`);
