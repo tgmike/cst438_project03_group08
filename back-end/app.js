@@ -2,7 +2,6 @@ const mysql = require('mysql');
 const express = require("express");
 require('dotenv').config();
 
-const hostname = '127.0.0.1';
 const port = 3000;
 const pool = dbConnection();
 const app = express();
@@ -41,8 +40,8 @@ app.get("/book", async (req, res, next) => {
   res.json(book[0]);
  });
  
-app.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+app.listen(port, () => {
+  console.log(`Server running at ${port}`);
 });
 
 async function executeSQL(sql, params) {
