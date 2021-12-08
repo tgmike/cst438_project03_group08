@@ -10,6 +10,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Cst438_project03_group08">
         <activity
+            android:name=".EditAccountInfoPage"
+            android:exported="false" />
+        <activity
+            android:name=".LoginPage"
+            android:exported="false" />
+        <activity
+            android:name=".SignUpPage"
+            android:exported="false" />
+        <activity
+            android:name=".HomePage"
+            android:exported="true" />
+        <activity
             android:name=".LandingPage"
             android:exported="true" />
         <activity
