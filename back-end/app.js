@@ -90,6 +90,7 @@ app.get("/reservation", async (req, res) => {
   let reservations = await executeSQL(reservationsSql, param);
   res.json(reservations);
 });
+
 app.delete("/deleteRes", async (req, res) => {
   let reservationId = req.query.reservationId;
   let reservationSql = "DELETE FROM Reservations WHERE reservationId = ?";
@@ -106,6 +107,31 @@ app.delete("/deleteRes", async (req, res) => {
     });
   }
 });
+
+app.get("/availability", async (req, res) => {
+let booksAv = [];
+let booksSql = "SELECT * FROM Books";
+let reservationsSql = "SELECT * FROM Reservations";
+let reservations = await executeSQL(reservationsSql);
+let books = await executeSQL(booksSql);
+let count = 0;
+for(let i = 0; i < books.length; i++){
+  for(let x = 0; x < reservations.length; x++){
+    if(books[i].bookId==reservations[x].bookId){
+      break;
+    }
+    else{
+      count+=1;
+    }
+  }
+  if(count!=0){
+    booksAv.push(books[i]);
+    count = 0;
+  }
+}
+res.json(booksAv);
+});
+
 app.listen(port, () => {
   console.log(`Server running at ${port}`);
 });
