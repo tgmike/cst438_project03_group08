@@ -4,7 +4,6 @@
   "description": "API server",
   "main": "app.js",
   "scripts": {
-    "start": "node back-end/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,8 +17,10 @@
   },
   "homepage": "https://github.com/tgmike/cst438_project03_group08#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "moment": "^2.29.1",
     "mysql": "^2.18.1"
   }
 }
