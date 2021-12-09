@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Cst438_project03_group08">
         <activity
+            android:name=".BookAvailabilityPage"
+            android:exported="false" />
+        <activity
             android:name=".EditAccountInfoPage"
             android:exported="false" />
         <activity
