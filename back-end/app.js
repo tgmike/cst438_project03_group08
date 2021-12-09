@@ -68,7 +68,15 @@ app.post("/book", async (req, res) => {
   let insertBook = await executeSQL(bookInsertSql, params)[0];
   res.json(insertBook);
 });
- 
+app.get("/allCurrentReservations", async (req, res) => {
+  let reservationsSql = "SELECT * FROM Reservations";
+  let reservations = await executeSQL(reservationsSql);
+  res.json(reservations);
+})
+// app.get("/currentReservations", async (req, res) => {
+// let user = req.query.userId;
+// let userSql = "SELECT * FROM Users"
+// });
 app.listen(port, () => {
   console.log(`Server running at ${port}`);
 });
