@@ -21,7 +21,7 @@ public class LoginPage extends AppCompatActivity {
 
         btnBack = findViewById(R.id.btnBack);
         btnLogin = findViewById(R.id.btnLogin);
-        tvSignUp = findViewById(R.id.tvSignUp);
+        //tvSignUp = findViewById(R.id.tvSignUp);
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
