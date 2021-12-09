@@ -59,7 +59,15 @@ app.delete("/book", async (req, res) => {
     });
   }
 });
-
+//creates users
+app.post("/createAccount", async (req, res) => {
+  let username = req.body.username;
+  let password = req.body.password;
+  let createSql = "INSERT INTO Users (username, password) VALUES (?, ?)";
+  let params = [username, password];
+  let insertUser = await executeSQL(createSql, params);
+  res.json(insertUser);
+});
 app.post("/book", async (req, res) => {
   let title = req.body.title;
   let author = req.body.author;
@@ -68,15 +76,20 @@ app.post("/book", async (req, res) => {
   let insertBook = await executeSQL(bookInsertSql, params)[0];
   res.json(insertBook);
 });
-app.get("/allCurrentReservations", async (req, res) => {
+//gets all reservations from all users
+app.get("/reservations", async (req, res) => {
   let reservationsSql = "SELECT * FROM Reservations";
   let reservations = await executeSQL(reservationsSql);
   res.json(reservations);
 })
-// app.get("/currentReservations", async (req, res) => {
-// let user = req.query.userId;
-// let userSql = "SELECT * FROM Users"
-// });
+//Returns user's current reservation
+app.get("/reservation", async (req, res) => {
+let user = req.query.userId;
+let reservationsSql = "SELECT * FROM Reservations WHERE userId = ?";
+let param = [user];
+let reservations = await executeSQL(reservationsSql, param);
+res.json(reservations);
+});
 app.listen(port, () => {
   console.log(`Server running at ${port}`);
 });
