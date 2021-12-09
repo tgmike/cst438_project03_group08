@@ -1,7 +1,6 @@
 package com.example.cst438_project03_group08;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
