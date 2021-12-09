@@ -160,9 +160,9 @@ app.get("/reservations", async (req, res) => {
 })
 //Returns user's current reservation
 app.get("/reservation", async (req, res) => {
-  let user = req.query.userId;
-  let reservationsSql = "SELECT * FROM Reservations WHERE userId = ?";
-  let param = [user];
+  let reservation = req.query.reservationId;
+  let reservationsSql = "SELECT * FROM Reservations WHERE reservationId = ?";
+  let param = [reservation];
   let reservations = await executeSQL(reservationsSql, param);
   res.json(reservations);
 });
