@@ -2,6 +2,7 @@ const mysql = require('mysql');
 require('dotenv').config();
 const express = require("express");
 const cors = require('cors');
+var moment = require('moment');
 const port = process.env.PORT || 3000;
 const pool = dbConnection();
 const app = express();
@@ -101,6 +102,46 @@ app.delete("/user", async (req, res) => {
       message: 'User successfully deleted'
     });
   }
+});
+
+app.post("/reservation", async (req, res) => {
+  let date1 = new Date();
+  const format1 = "YYYY-MM-DD HH:mm:ss";
+  let reservationDateTime = moment(date1).format(format1);
+  let userId = req.body.userId;
+  let bookId = req.body.bookId;
+  //Check if user exists
+  let userSql = "SELECT * FROM Users where userId = ?";
+  let param = [userId]
+  let user = await executeSQL(userSql, param);
+  if(user.length == 0){
+    return res.status(404).send({
+      message: 'Error user not found'
+    });
+  }
+  //Check if book exists
+  let bookSql = "SELECT * FROM Books where bookId = ?";
+  param = [bookId]
+  let book = await executeSQL(bookSql, param);
+  if(book.length == 0){
+    return res.status(404).send({
+      message: 'Error book not found'
+    });
+  }
+  //Check to see if book is reserved
+  let reservationSql = "SELECT * FROM Reservations where bookId = ?";
+  param = [bookId]
+  book = await executeSQL(reservationSql, param);
+  if(book.length != 0){
+    return res.status(404).send({
+      message: 'Error book is already reserved'
+    });
+  }
+
+  let reservationInsertSql = "INSERT INTO Reservations (reservationDateTime, userId, bookId) VALUES (?, ?, ?)";
+  let params = [reservationDateTime, userId, bookId];
+  let insertReservation = await executeSQL(reservationInsertSql, params)[0];
+  res.json(insertReservation);
 });
  
 app.listen(port, () => {
