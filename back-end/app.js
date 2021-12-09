@@ -1,15 +1,14 @@
 const mysql = require('mysql');
-const express = require("express");
 require('dotenv').config();
+const express = require("express");
 const cors = require('cors');
 const port = process.env.PORT || 3000;
 const pool = dbConnection();
 const app = express();
 
-app.use(cors())
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-
 function dbConnection() {
   const pool = mysql.createPool({
     connectionLimit: 10,
@@ -76,6 +75,42 @@ app.post("/book", async (req, res) => {
   let insertBook = await executeSQL(bookInsertSql, params)[0];
   res.json(insertBook);
 });
+
+app.get("/users", async (req, res) => {
+  let usersSql = "SELECT * FROM Users";
+  let users = await executeSQL(usersSql);
+  res.json(users);
+});
+
+app.get("/user", async (req, res) => {
+  let userId = req.query.userId;
+  let userSql = "SELECT * FROM Users where userId = ?";
+  let param = [userId]
+  let user = await executeSQL(userSql, param);
+  if(user.length == 0){
+    return res.status(404).send({
+      message: 'Error user not found'
+    });
+  }
+  res.json(user[0]);
+});
+
+app.delete("/user", async (req, res) => {
+  let userId = req.query.userId;
+  let userSql = "DELETE FROM Users where userId = ?";
+  let param = [userId]
+  let user = await executeSQL(userSql, param);
+  if(user.affectedRows == 0){
+    return res.status(200).send({
+      message: 'Error user not found'
+    });
+  }else{
+    return res.status(404).send({
+      message: 'User successfully deleted'
+    });
+  }
+});
+ 
 //gets all reservations from all users
 app.get("/reservations", async (req, res) => {
   let reservationsSql = "SELECT * FROM Reservations";
@@ -133,7 +168,7 @@ res.json(booksAv);
 });
 
 app.listen(port, () => {
-  console.log(`Server running at ${port}`);
+  console.log(`Server running at http://localhost:${port}`);
 });
 
 async function executeSQL(sql, params) {
