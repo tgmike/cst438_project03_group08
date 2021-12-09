@@ -84,11 +84,27 @@ app.get("/reservations", async (req, res) => {
 })
 //Returns user's current reservation
 app.get("/reservation", async (req, res) => {
-let user = req.query.userId;
-let reservationsSql = "SELECT * FROM Reservations WHERE userId = ?";
-let param = [user];
-let reservations = await executeSQL(reservationsSql, param);
-res.json(reservations);
+  let user = req.query.userId;
+  let reservationsSql = "SELECT * FROM Reservations WHERE userId = ?";
+  let param = [user];
+  let reservations = await executeSQL(reservationsSql, param);
+  res.json(reservations);
+});
+app.delete("/deleteRes", async (req, res) => {
+  let reservationId = req.query.reservationId;
+  let reservationSql = "DELETE FROM Reservations WHERE reservationId = ?";
+  let param = [reservationId];
+  let reservation = await executeSQL(reservationSql, param);
+  if(reservation.affectedRows == 0){
+    return res.status(200).send({
+      message: 'Reservation not found'
+    });
+  }
+  else{
+    return res.status(200).send({
+      message: 'Reservation deleted'
+    });
+  }
 });
 app.listen(port, () => {
   console.log(`Server running at ${port}`);
