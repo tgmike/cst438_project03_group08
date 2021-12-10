@@ -79,7 +79,7 @@ public class LoginPage extends AppCompatActivity {
                                         uPassword = user.getPassword();
                                         Toast.makeText(LoginPage.this, "Welcome", Toast.LENGTH_SHORT).show();
                                             Intent i = new Intent(LoginPage.this, HomePage.class);
-                                            i.putExtra("user_id", user.getUserId());
+                                            i.putExtra("UserId", String.valueOf(user.getUserId()));
                                             startActivity(i);
                                             finish();
                                             break;

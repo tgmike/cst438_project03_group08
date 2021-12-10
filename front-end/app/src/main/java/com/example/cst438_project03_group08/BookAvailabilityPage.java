@@ -61,9 +61,7 @@ public class BookAvailabilityPage extends AppCompatActivity {
                     Toast.makeText(BookAvailabilityPage.this, "FAILED TO RESERVE", Toast.LENGTH_SHORT).show();
                 }
             });
-
         }
-
 
         call.enqueue(new Callback<List<Book>>() {
             @Override
@@ -78,7 +76,10 @@ public class BookAvailabilityPage extends AppCompatActivity {
                 // Adding the books to recycler view
                 mRecyclerView = findViewById(R.id.rvBooks);
                 mRecyclerView.setHasFixedSize(true);
-                mAdapter = new BookAdapter(books, BookAvailabilityPage.this, Integer.valueOf(user_id));
+                Log.d("USERID", user_id);
+                Integer u_id;
+                u_id = Integer.valueOf(user_id);
+                mAdapter = new BookAdapter(books, BookAvailabilityPage.this, u_id);
                 mRecyclerView.setLayoutManager(mLayoutManager);
                 mRecyclerView.setAdapter(mAdapter);
             }

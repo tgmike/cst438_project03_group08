@@ -21,7 +21,9 @@ public class HomePage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(HomePage.this, BookAvailabilityPage.class);
-                i.putExtra("UserId", "1");
+                String user_id;
+                user_id = getIntent().getStringExtra("UserId");
+                i.putExtra("UserId", user_id);
                 startActivity(i);
             }
         });
