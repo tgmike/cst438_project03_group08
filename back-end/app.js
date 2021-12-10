@@ -10,6 +10,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+
 function dbConnection() {
   const pool = mysql.createPool({
     connectionLimit: 10,
@@ -142,6 +143,11 @@ app.get("/reservation", async (req, res) => {
   let reservationsSql = "SELECT * FROM Reservations WHERE reservationId = ?";
   let param = [reservation];
   let reservations = await executeSQL(reservationsSql, param);
+  if(reservations.length == 0){
+    return res.status(404).send({
+      message: 'Error reservation not found'
+    });
+  }
   res.json(reservations);
 });
 
@@ -168,6 +174,7 @@ app.post("/reservation", async (req, res) => {
   let reservationDateTime = moment(date1).format(format1);
   let userId = req.body.userId;
   let bookId = req.body.bookId;
+
   //Check if user exists
   let userSql = "SELECT * FROM Users where userId = ?";
   let param = [userId]
@@ -177,6 +184,7 @@ app.post("/reservation", async (req, res) => {
       message: 'Error user not found'
     });
   }
+
   //Check if book exists
   let bookSql = "SELECT * FROM Books where bookId = ?";
   param = [bookId]
@@ -186,6 +194,7 @@ app.post("/reservation", async (req, res) => {
       message: 'Error book not found'
     });
   }
+
   //Check to see if book is reserved
   let reservationSql = "SELECT * FROM Reservations where bookId = ?";
   param = [bookId]
@@ -203,27 +212,25 @@ app.post("/reservation", async (req, res) => {
 });
 
 app.get("/availability", async (req, res) => {
-let booksAv = [];
-let booksSql = "SELECT * FROM Books";
-let reservationsSql = "SELECT * FROM Reservations";
-let reservations = await executeSQL(reservationsSql);
-let books = await executeSQL(booksSql);
-let count = 0;
-for(let i = 0; i < books.length; i++){
-  for(let x = 0; x < reservations.length; x++){
-    if(books[i].bookId==reservations[x].bookId){
-      break;
-    }
-    else{
-      count+=1;
+  let booksAv = [];
+  let bookId;
+  let param;
+  let book;
+  let reservationsSql;
+  let bookReserved;
+  let booksSql = "SELECT * FROM Books";
+  let books = await executeSQL(booksSql);
+  for(const index in books) {
+    book = books[index];
+    bookId = book.bookId;
+    reservationsSql = "SELECT * FROM Reservations WHERE bookId = ?";
+    param = [bookId];
+    bookReserved = await executeSQL(reservationsSql, param);
+    if(bookReserved.length == 0){
+      booksAv.push(book);
     }
   }
-  if(count!=0){
-    booksAv.push(books[i]);
-    count = 0;
-  }
-}
-res.json(booksAv);
+  res.json(booksAv);
 });
 
 
