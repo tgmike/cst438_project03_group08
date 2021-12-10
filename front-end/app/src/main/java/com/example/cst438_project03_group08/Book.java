@@ -11,8 +11,10 @@ package com.example.cst438_project03_group08;
 public class Book {
     String title;
     String author;
+    int bookId;
 
-    public Book (String mTitle, String mAuthor){
+    public Book (int mBookId, String mTitle, String mAuthor){
+        bookId = mBookId;
         title = mTitle;
         author = mAuthor;
     }
@@ -31,5 +33,22 @@ public class Book {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public int getBookId() {
+        return bookId;
+    }
+
+    public void setBookId(int bookId) {
+        this.bookId = bookId;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", bookId=" + bookId +
+                '}';
     }
 }
