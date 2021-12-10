@@ -69,6 +69,7 @@ app.post("/book", async (req, res) => {
   res.json(insertBook);
 });
 
+
 app.get("/users", async (req, res) => {
   let usersSql = "SELECT * FROM Users";
   let users = await executeSQL(usersSql);
@@ -224,6 +225,7 @@ for(let i = 0; i < books.length; i++){
 }
 res.json(booksAv);
 });
+
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
