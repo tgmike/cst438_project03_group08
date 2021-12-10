@@ -3,6 +3,9 @@ package com.example.cst438_project03_group08;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -44,20 +47,24 @@ public class BookAvailabilityPage extends AppCompatActivity {
         if(book_id != null){
             Log.d("FOUND", "BookId: " + Integer.valueOf(book_id) + "\nUserId: " + Integer.valueOf(user_id));
             // reserve the book before the books rv gets updated
-            BookReserve body = new BookReserve(Integer.valueOf(user_id), Integer.valueOf(book_id));
+//            BookReserve body = new BookReserve(Integer.valueOf(user_id), Integer.valueOf(book_id));
             // body holding user_id and book_id
 
-            Call<String> reserveCall = bookService.reserveBook(body);
+            Call<Void> reserveCall = bookService.reserveBook(Integer.valueOf(user_id), Integer.valueOf(book_id));
 
-            reserveCall.enqueue(new Callback<String>() {
+            reserveCall.enqueue(new Callback<Void>() {
                 @Override
-                public void onResponse(Call<String> call, Response<String> response) {
+                public void onResponse(Call<Void> call, Response<Void> response) {
                     Log.d("RESPONSE", response.toString());
                     Toast.makeText(BookAvailabilityPage.this, "RESERVED", Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(BookAvailabilityPage.this, HomePage.class);
+                    i.putExtra("UserId", user_id);
+                    startActivity(i);
                 }
 
                 @Override
-                public void onFailure(Call<String> call, Throwable t) {
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Log.d("FAILURE", call.toString());
                     Toast.makeText(BookAvailabilityPage.this, "FAILED TO RESERVE", Toast.LENGTH_SHORT).show();
                 }
             });

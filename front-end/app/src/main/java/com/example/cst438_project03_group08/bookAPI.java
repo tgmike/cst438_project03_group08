@@ -5,11 +5,13 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 public interface bookAPI {
     @GET("availability")
     Call<List<Book>> getBooks();
 
     @POST("reservation")
-    Call<String> reserveBook(@Body BookReserve bookReserve);
+    Call<Void> reserveBook(@Query("userId") Integer userId,
+                             @Query("bookId") Integer bookId);
 }
