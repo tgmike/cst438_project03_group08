@@ -15,7 +15,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class BookAvailabilityPage extends AppCompatActivity {
-    List<Book> books;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -25,7 +24,41 @@ public class BookAvailabilityPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_availability_page);
 
-        getBooksFunction();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://cst438-project03-group08.herokuapp.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        List<Book> books;
+        books = new ArrayList<>();
+        mLayoutManager = new LinearLayoutManager(this);
+        bookAPI bookService = retrofit.create(bookAPI.class);
+        Call<List<Book>> call = bookService.getBooks();
+
+        call.enqueue(new Callback<List<Book>>() {
+            @Override
+            public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
+                if (response.isSuccessful()) {
+                    for(Book book: response.body()){
+                        Log.d("BOOK", book.toString());
+                        books.add(book);
+                    }
+                }
+
+                // Adding the books to recycler view
+                mRecyclerView = findViewById(R.id.rvBooks);
+                mRecyclerView.setHasFixedSize(true);
+                mAdapter = new BookAdapter(books);
+                mRecyclerView.setLayoutManager(mLayoutManager);
+                mRecyclerView.setAdapter(mAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<List<Book>> call, Throwable t) {
+                Log.d("BOOK", "Running error");
+                Toast.makeText(BookAvailabilityPage.this, "Fail to get the data..", Toast.LENGTH_SHORT).show();
+            }
+        });
 //
 //
 //        List<Book> allBooks = new ArrayList<>();
@@ -45,36 +78,9 @@ public class BookAvailabilityPage extends AppCompatActivity {
 //        // Adding the exercises to recycler view
 //        mRecyclerView = findViewById(R.id.rvBooks);
 //        mRecyclerView.setHasFixedSize(true);
-//        mAdapter = new BookAdapter(allBooks);
+//        mAdapter = new BookAdapter(books);
 //        mRecyclerView.setLayoutManager(mLayoutManager);
 //        mRecyclerView.setAdapter(mAdapter);
     }
 
-    void getBooksFunction(){
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://cst438-project03-group08.herokuapp.com")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        bookAPI bookService = retrofit.create(bookAPI.class);
-        Call<BookHelper> call = bookService.getBooks();
-
-        call.enqueue(new Callback<BookHelper>() {
-            @Override
-            public void onResponse(Call<BookHelper> call, Response<BookHelper> response) {
-                if (response.isSuccessful()) {
-                    for(Book book: response.body().getBooks()){
-                        Log.d("BOOK", book.toString());
-                        books.add(book);
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<BookHelper> call, Throwable t) {
-                Log.d("BOOK", "Running error");
-                Toast.makeText(BookAvailabilityPage.this, "Fail to get the data..", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 }
