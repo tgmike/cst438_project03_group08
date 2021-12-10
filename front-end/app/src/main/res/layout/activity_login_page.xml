@@ -27,6 +27,19 @@
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:text="Log in"
-        android:id="@+id/btnLogin" />
+        android:id="@+id/bLogin" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:text="Cancel"
+        android:id="@+id/cancel" />
+
+    <TextView
+        android:id="@+id/userData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#000" />
+
 
 </LinearLayout>

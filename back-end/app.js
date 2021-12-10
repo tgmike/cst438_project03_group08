@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 const express = require("express");
+const bodyparser = require('body-parser');
 require('dotenv').config();
 const cors = require('cors');
 const port = process.env.PORT || 3000;
@@ -43,6 +44,17 @@ app.get("/book", async (req, res) => {
   }
   res.json(book[0]);
 });
+ // ---------------------------------------------------------------------------------
+
+app.get("/users", async (req, res) => {
+  let usersSql = "SELECT * FROM Users";
+  let users = await executeSQL(usersSql);
+  res.json(users);
+
+});
+
+ // ---------------------------------------------------------------------------------
+
 
 app.delete("/book", async (req, res) => {
   let bookId = req.query.bookId;
@@ -68,7 +80,7 @@ app.post("/book", async (req, res) => {
   let insertBook = await executeSQL(bookInsertSql, params)[0];
   res.json(insertBook);
 });
- 
+
 app.listen(port, () => {
   console.log(`Server running at ${port}`);
 });
