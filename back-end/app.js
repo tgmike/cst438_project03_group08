@@ -62,8 +62,8 @@ app.delete("/book", async (req, res) => {
 });
 
 app.post("/book", async (req, res) => {
-  let title = req.body.title;
-  let author = req.body.author;
+  let title = req.query.title;
+  let author = req.query.author;
   let bookInsertSql = "INSERT INTO Books (title, author) VALUES (?, ?)";
   let params = [title, author];
   let insertBook = await executeSQL(bookInsertSql, params)[0];
@@ -108,8 +108,8 @@ app.delete("/user", async (req, res) => {
 
 //creates users
 app.post("/createAccount", async (req, res) => {
-  let username = req.body.username;
-  let password = req.body.password;
+  let username = req.query.username;
+  let password = req.query.password;
   let createSql = "INSERT INTO Users (username, password) VALUES (?, ?)";
   let params = [username, password];
   let insertUser = await executeSQL(createSql, params);
@@ -172,8 +172,8 @@ app.post("/reservation", async (req, res) => {
   let date1 = new Date();
   const format1 = "YYYY-MM-DD HH:mm:ss";
   let reservationDateTime = moment(date1).format(format1);
-  let userId = req.body.userId;
-  let bookId = req.body.bookId;
+  let userId = req.query.userId;
+  let bookId = req.query.bookId;
 
   //Check if user exists
   let userSql = "SELECT * FROM Users where userId = ?";
