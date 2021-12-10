@@ -4,15 +4,21 @@ import com.google.gson.annotations.SerializedName;
 
 public class LoginResult {
 
-    private String name;
+    private String id;
 
-    private String email;
+    private String username;
+
+    private String password;
+
+    private String getId() {
+        return id;
+    }
 
     public String getName() {
-        return name;
+        return username;
     }
 
     public String getEmail() {
-        return email;
+        return password;
     }
 }

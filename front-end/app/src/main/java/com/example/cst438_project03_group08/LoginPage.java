@@ -3,6 +3,7 @@ package com.example.cst438_project03_group08;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,6 +11,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
+//import java.util.Base64;
+import android.util.Base64;
 import java.util.List;
 
 import retrofit2.Call;
@@ -22,6 +26,7 @@ public class LoginPage extends AppCompatActivity {
 
     private EditText userName;
     private EditText password;
+    private String uName, uPassword;
     Button cancel;
     Button bLogin;
 
@@ -37,6 +42,7 @@ public class LoginPage extends AppCompatActivity {
         bLogin = findViewById(R.id.bLogin);
         userName = findViewById(R.id.etUsername);
         password = findViewById(R.id.etPassword);
+
 
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,6 +61,7 @@ public class LoginPage extends AppCompatActivity {
 
                 Call<List<User>> call = retrofitInterface.getUsers();
 
+
                 call.enqueue(new Callback<List<User>>() {
                     @Override
                     public void onResponse(Call<List<User>> call, Response<List<User>> response) {
@@ -64,21 +71,30 @@ public class LoginPage extends AppCompatActivity {
                         }
 
                         List<User> users = response.body();
-
-
-                        for(User user : users){
-                            if(!inputName.isEmpty()){
-                                if(user.getUsername().equals(inputName) && user.getPassword().equals(inputPassword)){
-                                    Toast.makeText(LoginPage.this, "Welcome", Toast.LENGTH_SHORT).show();
-                                    Intent i = new Intent(LoginPage.this, HomePage.class);
-                                    startActivity(i);
-                                    finish();
+                        if(!inputName.isEmpty() && !inputPassword.isEmpty()){
+                            for(User user: users){
+                                if(inputName.equals(user.getUsername())){
+                                    uName = user.getUsername();
+                                    if(inputPassword.equals(user.getPassword())){
+                                        uPassword = user.getPassword();
+                                        Toast.makeText(LoginPage.this, "Welcome", Toast.LENGTH_SHORT).show();
+                                            Intent i = new Intent(LoginPage.this, HomePage.class);
+                                            i.putExtra("user_id", user.getUserId());
+                                            startActivity(i);
+                                            finish();
+                                            break;
+                                    }else{
+                                        Toast.makeText(LoginPage.this, "Wrong Credentials. Try Again.", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    }
                                 }else{
                                     Toast.makeText(LoginPage.this, "Wrong Credentials. Try Again.", Toast.LENGTH_SHORT).show();
+                                    break;
                                 }
-                            }else{
-                                Toast.makeText(LoginPage.this, "Fields Cannot be Empty", Toast.LENGTH_SHORT).show();
                             }
+                        }else{
+                            Toast.makeText(LoginPage.this, "Fields Cannot be Empty.", Toast.LENGTH_SHORT).show();
+
                         }
                     }
 
@@ -101,5 +117,7 @@ public class LoginPage extends AppCompatActivity {
             }
         });
 
+
     }
+
 }
