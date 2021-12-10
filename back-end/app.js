@@ -59,15 +59,7 @@ app.delete("/book", async (req, res) => {
     });
   }
 });
-//creates users
-app.post("/createAccount", async (req, res) => {
-  let username = req.body.username;
-  let password = req.body.password;
-  let createSql = "INSERT INTO Users (username, password) VALUES (?, ?)";
-  let params = [username, password];
-  let insertUser = await executeSQL(createSql, params);
-  res.json(insertUser);
-});
+
 app.post("/book", async (req, res) => {
   let title = req.body.title;
   let author = req.body.author;
@@ -112,6 +104,63 @@ app.delete("/user", async (req, res) => {
   }
 });
 
+//creates users
+app.post("/createAccount", async (req, res) => {
+  let username = req.body.username;
+  let password = req.body.password;
+  let createSql = "INSERT INTO Users (username, password) VALUES (?, ?)";
+  let params = [username, password];
+  let insertUser = await executeSQL(createSql, params);
+  res.json(insertUser);
+});
+ 
+//gets all reservations from all users
+app.get("/reservationsAll", async (req, res) => {
+  let reservationsSql = "SELECT * FROM Reservations";
+  let reservations = await executeSQL(reservationsSql);
+  res.json(reservations);
+});
+
+//Returns all of a specified user's reservations
+app.get("/reservationsUser", async (req, res) => {
+  let userId = req.query.userId;
+  let reservationsSql = "SELECT * FROM Reservations WHERE userId = ?";
+  let param = [userId];
+  let reservations = await executeSQL(reservationsSql, param);
+  if(reservations.length == 0){
+    return res.status(404).send({
+      message: 'User doesn\'t exist or has no reservations'
+    });
+  }
+  res.json(reservations);
+});
+
+//Returns a specified reservation
+app.get("/reservation", async (req, res) => {
+  let reservation = req.query.reservationId;
+  let reservationsSql = "SELECT * FROM Reservations WHERE reservationId = ?";
+  let param = [reservation];
+  let reservations = await executeSQL(reservationsSql, param);
+  res.json(reservations);
+});
+
+app.delete("/reservation", async (req, res) => {
+  let reservationId = req.query.reservationId;
+  let reservationSql = "DELETE FROM Reservations WHERE reservationId = ?";
+  let param = [reservationId];
+  let reservation = await executeSQL(reservationSql, param);
+  if(reservation.affectedRows == 0){
+    return res.status(200).send({
+      message: 'Reservation not found'
+    });
+  }
+  else{
+    return res.status(200).send({
+      message: 'Reservation deleted'
+    });
+  }
+});
+
 app.post("/reservation", async (req, res) => {
   let date1 = new Date();
   const format1 = "YYYY-MM-DD HH:mm:ss";
@@ -150,38 +199,6 @@ app.post("/reservation", async (req, res) => {
   let params = [reservationDateTime, userId, bookId];
   let insertReservation = await executeSQL(reservationInsertSql, params)[0];
   res.json(insertReservation);
-});
- 
-//gets all reservations from all users
-app.get("/reservations", async (req, res) => {
-  let reservationsSql = "SELECT * FROM Reservations";
-  let reservations = await executeSQL(reservationsSql);
-  res.json(reservations);
-})
-//Returns user's current reservation
-app.get("/reservation", async (req, res) => {
-  let reservation = req.query.reservationId;
-  let reservationsSql = "SELECT * FROM Reservations WHERE reservationId = ?";
-  let param = [reservation];
-  let reservations = await executeSQL(reservationsSql, param);
-  res.json(reservations);
-});
-
-app.delete("/deleteRes", async (req, res) => {
-  let reservationId = req.query.reservationId;
-  let reservationSql = "DELETE FROM Reservations WHERE reservationId = ?";
-  let param = [reservationId];
-  let reservation = await executeSQL(reservationSql, param);
-  if(reservation.affectedRows == 0){
-    return res.status(200).send({
-      message: 'Reservation not found'
-    });
-  }
-  else{
-    return res.status(200).send({
-      message: 'Reservation deleted'
-    });
-  }
 });
 
 app.get("/availability", async (req, res) => {
