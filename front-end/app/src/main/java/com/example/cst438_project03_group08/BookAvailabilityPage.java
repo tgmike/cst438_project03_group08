@@ -5,6 +5,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,7 @@ public class BookAvailabilityPage extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private String book_id, user_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,33 @@ public class BookAvailabilityPage extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         bookAPI bookService = retrofit.create(bookAPI.class);
         Call<List<Book>> call = bookService.getBooks();
+        user_id = getIntent().getStringExtra("UserId");
+        book_id = getIntent().getStringExtra("BookId");
+
+        // if bookID not empty, then (reserve the book using route)
+        if(book_id != null){
+            Log.d("FOUND", "BookId: " + Integer.valueOf(book_id) + "\nUserId: " + Integer.valueOf(user_id));
+            // reserve the book before the books rv gets updated
+            BookReserve body = new BookReserve(Integer.valueOf(user_id), Integer.valueOf(book_id));
+            // body holding user_id and book_id
+
+            Call<String> reserveCall = bookService.reserveBook(body);
+
+            reserveCall.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    Log.d("RESPONSE", response.toString());
+                    Toast.makeText(BookAvailabilityPage.this, "RESERVED", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Toast.makeText(BookAvailabilityPage.this, "FAILED TO RESERVE", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }
+
 
         call.enqueue(new Callback<List<Book>>() {
             @Override
@@ -48,7 +78,7 @@ public class BookAvailabilityPage extends AppCompatActivity {
                 // Adding the books to recycler view
                 mRecyclerView = findViewById(R.id.rvBooks);
                 mRecyclerView.setHasFixedSize(true);
-                mAdapter = new BookAdapter(books);
+                mAdapter = new BookAdapter(books, BookAvailabilityPage.this, Integer.valueOf(user_id));
                 mRecyclerView.setLayoutManager(mLayoutManager);
                 mRecyclerView.setAdapter(mAdapter);
             }
@@ -59,28 +89,5 @@ public class BookAvailabilityPage extends AppCompatActivity {
                 Toast.makeText(BookAvailabilityPage.this, "Fail to get the data..", Toast.LENGTH_SHORT).show();
             }
         });
-//
-//
-//        List<Book> allBooks = new ArrayList<>();
-//        mLayoutManager = new LinearLayoutManager(this);
-//
-//        // adding mock data of Books
-//        allBooks.add(new Book("Green Eggs and Ham", "Dr. Seuss"));
-//        allBooks.add(new Book("Hunger Games", "Suzanne Collins"));
-//        allBooks.add(new Book("Unbroken", "Lauren Hillenbrand"));
-//        allBooks.add(new Book("Harry Potter and the Deathly Hallows", "J.K. Rowling"));
-//        allBooks.add(new Book("Twilight", "Stephanie Meyer"));
-//        allBooks.add(new Book("The Lovely Bones", "Alice Sebold"));
-//        allBooks.add(new Book("Life of Pi", "Yann Martel"));
-//        allBooks.add(new Book("The Boy in the Striped Pyjamas", "John Boyne"));
-//
-//
-//        // Adding the exercises to recycler view
-//        mRecyclerView = findViewById(R.id.rvBooks);
-//        mRecyclerView.setHasFixedSize(true);
-//        mAdapter = new BookAdapter(books);
-//        mRecyclerView.setLayoutManager(mLayoutManager);
-//        mRecyclerView.setAdapter(mAdapter);
     }
-
 }
