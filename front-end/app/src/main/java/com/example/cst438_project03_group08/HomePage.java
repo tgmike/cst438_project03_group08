@@ -10,12 +10,15 @@ import android.widget.Button;
 public class HomePage extends AppCompatActivity {
 
     Button btnAvailable;
+    Button btnMyReservations;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
 
         btnAvailable = findViewById(R.id.btnAvailable);
+        btnMyReservations = findViewById(R.id.btnReservations);
 
         btnAvailable.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -27,5 +30,17 @@ public class HomePage extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        btnMyReservations.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(HomePage.this, MyReservations.class);
+                String user_id;
+                user_id = getIntent().getStringExtra("UserId");
+                i.putExtra("UserId", user_id);
+                startActivity(i);
+            }
+        });
+
     }
 }
