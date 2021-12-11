@@ -58,7 +58,7 @@ public class BookAvailabilityPage extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
-                    Log.d("FAILURE", call.toString());
+                    // Log.d("FAILURE", call.toString());
                     Toast.makeText(BookAvailabilityPage.this, "FAILED TO RESERVE", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -69,7 +69,7 @@ public class BookAvailabilityPage extends AppCompatActivity {
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
                 if (response.isSuccessful()) {
                     for(Book book: response.body()){
-                        Log.d("BOOK", book.toString());
+                        // Log.d("BOOK", book.toString());
                         books.add(book);
                     }
                 }
@@ -77,7 +77,7 @@ public class BookAvailabilityPage extends AppCompatActivity {
                 // Adding the books to recycler view
                 mRecyclerView = findViewById(R.id.rvBooks);
                 mRecyclerView.setHasFixedSize(true);
-                Log.d("USERID", user_id);
+                // Log.d("USERID", user_id);
                 Integer u_id;
                 u_id = Integer.valueOf(user_id);
                 mAdapter = new BookAdapter(books, BookAvailabilityPage.this, u_id);
@@ -87,7 +87,7 @@ public class BookAvailabilityPage extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Book>> call, Throwable t) {
-                Log.d("BOOK", "Running error");
+                // Log.d("BOOK", "Running error");
                 Toast.makeText(BookAvailabilityPage.this, "Fail to get the data..", Toast.LENGTH_SHORT).show();
             }
         });

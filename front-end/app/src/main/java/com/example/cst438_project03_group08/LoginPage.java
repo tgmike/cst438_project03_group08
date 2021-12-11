@@ -29,7 +29,7 @@ public class LoginPage extends AppCompatActivity {
     private String uName, uPassword;
     Button cancel;
     Button bLogin;
-
+    private int uID;
     private TextView userData;
 
     @Override
@@ -43,11 +43,9 @@ public class LoginPage extends AppCompatActivity {
         userName = findViewById(R.id.etUsername);
         password = findViewById(R.id.etPassword);
 
-
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
 
                 String inputName = userName.getText().toString();
                 String inputPassword = password.getText().toString();
@@ -60,8 +58,6 @@ public class LoginPage extends AppCompatActivity {
                 RetrofitInterface retrofitInterface = retrofit.create(RetrofitInterface.class);
 
                 Call<List<User>> call = retrofitInterface.getUsers();
-
-
                 call.enqueue(new Callback<List<User>>() {
                     @Override
                     public void onResponse(Call<List<User>> call, Response<List<User>> response) {
@@ -71,28 +67,24 @@ public class LoginPage extends AppCompatActivity {
                         }
 
                         List<User> users = response.body();
-                        if(!inputName.isEmpty() && !inputPassword.isEmpty()){
-                            for(User user: users){
-                                if(inputName.equals(user.getUsername())){
+                        if (!inputName.isEmpty() && !inputPassword.isEmpty()) {
+                            for (User user : users) {
+                                if (inputName.equals(user.getUsername())) {
                                     uName = user.getUsername();
-                                    if(inputPassword.equals(user.getPassword())){
-                                        uPassword = user.getPassword();
-                                        Toast.makeText(LoginPage.this, "Welcome", Toast.LENGTH_SHORT).show();
-                                            Intent i = new Intent(LoginPage.this, HomePage.class);
-                                            i.putExtra("UserId", String.valueOf(user.getUserId()));
-                                            startActivity(i);
-                                            finish();
-                                            break;
-                                    }else{
-                                        Toast.makeText(LoginPage.this, "Wrong Credentials. Try Again.", Toast.LENGTH_SHORT).show();
-                                        break;
-                                    }
-                                }else{
-                                    Toast.makeText(LoginPage.this, "Wrong Credentials. Try Again.", Toast.LENGTH_SHORT).show();
-                                    break;
+                                    uPassword = user.getPassword();
+                                    uID = user.getUserId();
                                 }
                             }
-                        }else{
+                            if (inputPassword.equals(uPassword)) {
+                                Toast.makeText(LoginPage.this, "Welcome", Toast.LENGTH_SHORT).show();
+                                Intent i = new Intent(LoginPage.this, HomePage.class);
+                                i.putExtra("UserId", String.valueOf(uID));
+                                startActivity(i);
+                                finish();
+                            } else {
+                                Toast.makeText(LoginPage.this, "Wrong Credentials. Try Again.", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
                             Toast.makeText(LoginPage.this, "Fields Cannot be Empty.", Toast.LENGTH_SHORT).show();
 
                         }
@@ -103,9 +95,7 @@ public class LoginPage extends AppCompatActivity {
                         userData.setText(t.getMessage());
                     }
                 });
-
             }
-
         });
 
         cancel.setOnClickListener(new View.OnClickListener() {

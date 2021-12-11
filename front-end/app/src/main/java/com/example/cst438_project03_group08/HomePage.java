@@ -11,6 +11,7 @@ public class HomePage extends AppCompatActivity {
 
     Button btnAvailable;
     Button btnMyReservations;
+    Button btnAllReservations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +20,7 @@ public class HomePage extends AppCompatActivity {
 
         btnAvailable = findViewById(R.id.btnAvailable);
         btnMyReservations = findViewById(R.id.btnReservations);
+        btnAllReservations = findViewById(R.id.btnAllReservation);
 
         btnAvailable.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,6 +37,17 @@ public class HomePage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(HomePage.this, MyReservations.class);
+                String user_id;
+                user_id = getIntent().getStringExtra("UserId");
+                i.putExtra("UserId", user_id);
+                startActivity(i);
+            }
+        });
+
+        btnAllReservations.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(HomePage.this, AllReservations.class);
                 String user_id;
                 user_id = getIntent().getStringExtra("UserId");
                 i.putExtra("UserId", user_id);

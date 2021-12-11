@@ -12,6 +12,9 @@ public interface bookAPI {
     @GET("availability")
     Call<List<Book>> getBooks();
 
+    @GET("reservationsAll")
+    Call<List<Reservations>> getAllReservation();
+
     @GET("reservationsUser")
     Call<List<Reservations>> getMyReservations(@Query("userId") Integer userId);
 
