@@ -6,17 +6,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".BookAvailabilityPage">
+    tools:context=".MyReservations">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="25dp"
         android:gravity="center"
-        android:text="These are our available books!"/>
+        android:text="View your current reservations"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvBooks"
+        android:id="@+id/rvMyReservations"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="4dp"
