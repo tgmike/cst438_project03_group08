@@ -9,6 +9,7 @@ import retrofit2.http.GET;
 import retrofit2.http.HEAD;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 public interface RetrofitInterface {
 
@@ -16,6 +17,7 @@ public interface RetrofitInterface {
     Call<List<User>> getUsers();
 
 
-    @POST("users/")
-    Call<String> checkLogin(@Header("Authorization") String authToken);
+    @POST("createAccount")
+    Call<Void> createAccount(@Query("username") String username,
+                               @Query("password") String password);
 }
